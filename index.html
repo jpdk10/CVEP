@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CHI VUOL ESSERE PSICOBIOLOGA?</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #1a1a1a;
+            color: #ffffff;
+        }
+        h1 {
+            text-align: center;
+            color: #ffd700;
+            font-size: 24px;
+            margin-bottom: 30px;
+        }
+        .question {
+            text-align: center;
+            font-size: 1.2em;
+            margin-bottom: 20px;
+            color: #00ffff;
+        }
+        .options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+        .option {
+            background-color: #333333;
+            border: 1px solid #555555;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .option:hover {
+            background-color: #444444;
+        }
+        .option.selected {
+            background-color: #ffd700;
+            color: #000000;
+            font-weight: bold;
+        }
+        .option.correct {
+            background-color: #00ff00;
+            color: #000000;
+        }
+        .option.incorrect {
+            background-color: #ff0000;
+            color: #ffffff;
+        }
+        .controls {
+            margin-top: 20px;
+            text-align: center;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            margin: 0 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        button:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+        #results, #recap {
+            margin-top: 20px;
+            text-align: left;
+        }
+        .recap-item {
+            margin-bottom: 20px;
+            padding: 10px;
+            border: 1px solid #555555;
+            border-radius: 5px;
+        }
+        .recap-item.correct {
+            background-color: #004400;
+        }
+        .recap-item.incorrect {
+            background-color: #440000;
+        }
+        #restartBtn {
+            display: block;
+            margin: 20px auto;
+            background-color: #ffd700;
+            color: #000000;
+        }
+        #restartBtn:hover {
+            background-color: #ffea00;
+        }
+    </style>
+</head>
+<body>
+    <h1>CHI VUOL ESSERE PSICOBIOLOGA?</h1>
+    <div id="quiz">
+        <div class="question" id="question"></div>
+        <div class="options" id="options"></div>
+    </div>
+    <div class="controls">
+        <button onclick="previousQuestion()" id="prevBtn">Precedente</button>
+        <button onclick="nextQuestion()" id="nextBtn">Successiva</button>
+        <button onclick="checkAnswers()" id="submitBtn" style="display: none;">Verifica le risposte</button>
+    </div>
+    <div id="results"></div>
+    <div id="recap"></div>
+    <button onclick="restartQuiz()" id="restartBtn">Ricomincia</button>
+
+   <script>
+        const quizData = [
+            {
+                question: "Qual è la capitale dell'Italia?",
+                options: ["Milano", "Roma", "Firenze", "Napoli"],
+                correctAnswer: 1
+            },
+            {
+                question: "Chi ha dipinto la Gioconda?",
+                options: ["Michelangelo", "Leonardo da Vinci", "Raffaello", "Botticelli"],
+                correctAnswer: 1
+            },
+            {
+                question: "Qual è il pianeta più grande del sistema solare?",
+                options: ["Marte", "Venere", "Giove", "Saturno"],
+                correctAnswer: 2
+            }
+        ];
+
+        let currentQuestion = 0;
+        let userAnswers = [];
+
+        function showQuestion(index) {
+            const q = quizData[index];
+            document.getElementById("question").textContent = `${index + 1}. ${q.question}`;
+            
+            const optionsContainer = document.getElementById("options");
+            optionsContainer.innerHTML = "";
+            q.options.forEach((option, i) => {
+                const optionDiv = document.createElement("div");
+                optionDiv.className = "option";
+                optionDiv.textContent = option;
+                optionDiv.onclick = () => selectOption(i);
+                if (userAnswers[index] === i) {
+                    optionDiv.classList.add("selected");
+                }
+                optionsContainer.appendChild(optionDiv);
+            });
+
+            document.getElementById("prevBtn").disabled = index === 0;
+            document.getElementById("nextBtn").textContent = index === quizData.length - 1 ? "Fine" : "Successiva";
+            document.getElementById("submitBtn").style.display = index === quizData.length - 1 ? "inline-block" : "none";
+        }
+
+        function selectOption(optionIndex) {
+            userAnswers[currentQuestion] = optionIndex;
+            const options = document.querySelectorAll(".option");
+            options.forEach((option, i) => {
+                option.classList.toggle("selected", i === optionIndex);
+            });
+        }
+
+        function showCorrectAnswer() {
+            const q = quizData[currentQuestion];
+            const options = document.querySelectorAll(".option");
+            options.forEach((option, i) => {
+                if (i === q.correctAnswer) {
+                    option.classList.add("correct");
+                } else if (i === userAnswers[currentQuestion]) {
+                    option.classList.add("incorrect");
+                }
+            });
+        }
+
+        function nextQuestion() {
+            showCorrectAnswer();
+            setTimeout(() => {
+                if (currentQuestion < quizData.length - 1) {
+                    currentQuestion++;
+                    showQuestion(currentQuestion);
+                }
+            }, 1000);
+        }
+
+        function previousQuestion() {
+            if (currentQuestion > 0) {
+                currentQuestion--;
+                showQuestion(currentQuestion);
+            }
+        }
+
+        function checkAnswers() {
+            showCorrectAnswer();
+            let score = 0;
+            let recapHtml = "<h2>Riepilogo delle risposte:</h2>";
+
+            quizData.forEach((q, index) => {
+                const isCorrect = userAnswers[index] === q.correctAnswer;
+                if (isCorrect) score++;
+
+                recapHtml += `
+                    <div class="recap-item ${isCorrect ? 'correct' : 'incorrect'}">
+                        <p><strong>Domanda ${index + 1}:</strong> ${q.question}</p>
+                        <p>La tua risposta: ${q.options[userAnswers[index]]}</p>
+                        <p>Risposta corretta: ${q.options[q.correctAnswer]}</p>
+                    </div>
+                `;
+            });
+
+            const resultsDiv = document.getElementById("results");
+            resultsDiv.innerHTML = `<h2>Hai ottenuto ${score} su ${quizData.length} risposte corrette.</h2>`;
+
+            const recapDiv = document.getElementById("recap");
+            recapDiv.innerHTML = recapHtml;
+
+            // Nascondi il quiz e mostra solo i risultati e il recap
+            document.getElementById("quiz").style.display = "none";
+            document.getElementById("prevBtn").style.display = "none";
+            document.getElementById("nextBtn").style.display = "none";
+            document.getElementById("submitBtn").style.display = "none";
+        }
+
+        function restartQuiz() {
+            currentQuestion = 0;
+            userAnswers = [];
+            document.getElementById("quiz").style.display = "block";
+            document.getElementById("prevBtn").style.display = "inline-block";
+            document.getElementById("nextBtn").style.display = "inline-block";
+            document.getElementById("results").innerHTML = "";
+            document.getElementById("recap").innerHTML = "";
+            showQuestion(currentQuestion);
+        }
+
+        showQuestion(currentQuestion);
+    </script>
+</body>
+</html>
