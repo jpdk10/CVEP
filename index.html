@@ -7,7 +7,7 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            max-width: 600px;
+            max-width: 800px;
             margin: 0 auto;
             padding: 20px;
             background-color: #1a1a1a;
@@ -16,18 +16,18 @@
         h1 {
             text-align: center;
             color: #ffd700;
-            font-size: 24px;
+            font-size: 28px;
             margin-bottom: 30px;
         }
         .question {
-            text-align: center;
+            text-align: left;
             font-size: 1.2em;
             margin-bottom: 20px;
             color: #00ffff;
         }
         .options {
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: 1fr;
             gap: 10px;
         }
         .option {
@@ -100,10 +100,16 @@
         #restartBtn:hover {
             background-color: #ffea00;
         }
+        #progress {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #ffd700;
+        }
     </style>
 </head>
 <body>
     <h1>CHI VUOL ESSERE PSICOBIOLOGA?</h1>
+    <div id="progress"></div>
     <div id="quiz">
         <div class="question" id="question"></div>
         <div class="options" id="options"></div>
@@ -121,107 +127,418 @@
             {
                 question: "1. Qual è la funzione principale dei bastoncelli nella retina?",
                 options: [
-                    "a) Permettono la visione a colori.",
-                    "b) Sono specializzati nella visione in condizioni di bassa illuminazione.",
-                    "c) Sono responsabili della percezione dei dettagli fini.",
-                    "d) Si trovano principalmente nella fovea."
+                    "A) Permettono la visione a colori.",
+                    "B) Sono specializzati nella visione in condizioni di bassa illuminazione.",
+                    "C) Sono responsabili della percezione dei dettagli fini.",
+                    "D) Si trovano principalmente nella fovea."
                 ],
                 correctAnswer: 1
             },
             {
                 question: "2. Qual è il fotopigmento presente nei bastoncelli?",
                 options: [
-                    "a) Opsina.",
-                    "b) Retinale.",
-                    "c) Rodopsina.",
-                    "d) Melanopsina."
+                    "A) Opsina.",
+                    "B) Retinale.",
+                    "C) Rodopsina.",
+                    "D) Melanopsina."
                 ],
                 correctAnswer: 2
             },
             {
                 question: "3. Quale tipo di cellula retinica trasmette segnali dai fotorecettori alle cellule gangliari?",
                 options: [
-                    "a) Cellule amacrine.",
-                    "b) Cellule orizzontali.",
-                    "c) Cellule bipolari.",
-                    "d) Cellule gliali."
+                    "A) Cellule amacrine.",
+                    "B) Cellule orizzontali.",
+                    "C) Cellule bipolari.",
+                    "D) Cellule gliali."
                 ],
                 correctAnswer: 2
             },
             {
                 question: "4. Qual è il ruolo delle cellule gangliari nella retina?",
                 options: [
-                    "a) Trasmettono i segnali luminosi al nucleo genicolato laterale.",
-                    "b) Filtrano la luce per migliorare la visione dei colori.",
-                    "c) Mantengono aperti i canali del sodio in condizioni di buio.",
-                    "d) Inibiscono il rilascio di glutammato in risposta alla luce."
+                    "A) Trasmettono i segnali luminosi al nucleo genicolato laterale.",
+                    "B) Filtrano la luce per migliorare la visione dei colori.",
+                    "C) Mantengono aperti i canali del sodio in condizioni di buio.",
+                    "D) Inibiscono il rilascio di glutammato in risposta alla luce."
                 ],
                 correctAnswer: 0
             },
             {
                 question: "5. Dove termina la maggior parte degli assoni del tratto ottico?",
                 options: [
-                    "a) Corteccia visiva primaria.",
-                    "b) Collicolo superiore.",
-                    "c) Nucleo genicolato laterale del talamo.",
-                    "d) Chiasma ottico."
+                    "A) Corteccia visiva primaria.",
+                    "B) Collicolo superiore.",
+                    "C) Nucleo genicolato laterale del talamo.",
+                    "D) Chiasma ottico."
                 ],
                 correctAnswer: 2
             },
             {
                 question: "6. Quale delle seguenti affermazioni descrive correttamente l'adattamento alla luce dei fotorecettori?",
                 options: [
-                    "a) L'adattamento alla luce si verifica grazie all'attivazione costante dei canali del sodio.",
-                    "b) L'adattamento dipende dalla continua sintesi di fotopigmenti come la melanopsina.",
-                    "c) I fotorecettori diminuiscono la loro sensibilità alla luce in ambienti molto luminosi.",
-                    "d) Il sistema scotopico è responsabile dell'adattamento alla luce intensa."
+                    "A) L'adattamento alla luce si verifica grazie all'attivazione costante dei canali del sodio.",
+                    "B) L'adattamento dipende dalla continua sintesi di fotopigmenti come la melanopsina.",
+                    "C) I fotorecettori diminuiscono la loro sensibilità alla luce in ambienti molto luminosi.",
+                    "D) Il sistema scotopico è responsabile dell'adattamento alla luce intensa."
                 ],
                 correctAnswer: 2
             },
             {
                 question: "7. Quale processo avviene quando la luce stimola i fotorecettori?",
                 options: [
-                    "a) Si aprono i canali del sodio, provocando depolarizzazione.",
-                    "b) La concentrazione di cGMP aumenta, aprendo i canali del sodio.",
-                    "c) La rodopsina si attiva, portando all'iperpolarizzazione del fotorecettore.",
-                    "d) Il rilascio di glutammato aumenta."
+                    "A) Si aprono i canali del sodio, provocando depolarizzazione.",
+                    "B) La concentrazione di cGMP aumenta, aprendo i canali del sodio.",
+                    "C) La rodopsina si attiva, portando all'iperpolarizzazione del fotorecettore.",
+                    "D) Il rilascio di glutammato aumenta."
                 ],
                 correctAnswer: 2
             },
             {
                 question: "8. Qual è il ruolo delle cellule gangliari a opponenza cromatica?",
                 options: [
-                    "a) Ricevono segnali da fotorecettori adiacenti per migliorare l'acuità visiva.",
-                    "b) Sono sensibili ai cambiamenti di intensità luminosa.",
-                    "c) Codificano le informazioni cromatiche opponendo segnali da coni con sensibilità diversa.",
-                    "d) Coordinano i movimenti oculari rapidi verso un bersaglio."
+                    "A) Ricevono segnali da fotorecettori adiacenti per migliorare l'acuità visiva.",
+                    "B) Sono sensibili ai cambiamenti di intensità luminosa.",
+                    "C) Codificano le informazioni cromatiche opponendo segnali da coni con sensibilità diversa.",
+                    "D) Coordinano i movimenti oculari rapidi verso un bersaglio."
                 ],
                 correctAnswer: 2
             },
             {
                 question: "9. Cosa accade al livello del chiasma ottico?",
                 options: [
-                    "a) Gli assoni dei fotorecettori si connettono direttamente al cervello.",
-                    "b) Le informazioni visive passano dai coni ai bastoncelli.",
-                    "c) Gli assoni della metà nasale della retina si incrociano.",
-                    "d) Si completa l'elaborazione dei colori e delle forme."
+                    "A) Gli assoni dei fotorecettori si connettono direttamente al cervello.",
+                    "B) Le informazioni visive passano dai coni ai bastoncelli.",
+                    "C) Gli assoni della metà nasale della retina si incrociano.",
+                    "D) Si completa l'elaborazione dei colori e delle forme."
                 ],
                 correctAnswer: 2
             },
             {
                 question: "10. Quale area corticale è specializzata nel riconoscimento delle forme e dei colori?",
                 options: [
-                    "a) Corteccia motoria.",
-                    "b) Corteccia visiva primaria (V1).",
-                    "c) Collicolo superiore.",
-                    "d) Corteccia visiva infero-temporale."
+                    "A) Corteccia motoria.",
+                    "B) Corteccia visiva primaria (V1).",
+                    "C) Collicolo superiore.",
+                    "D) Corteccia visiva infero-temporale."
                 ],
                 correctAnswer: 3
+             {
+                question: "11. Qual è la principale differenza tra il sistema scotopico e il sistema fotopico?",
+                options: [
+                    "A) Il sistema scotopico è responsabile della visione a colori, mentre il sistema fotopico è responsabile della visione notturna.",
+                    "B) Il sistema scotopico ha una maggiore acuità visiva rispetto al sistema fotopico.",
+                    "C) Il sistema fotopico coinvolge i coni, mentre il sistema scotopico coinvolge i bastoncelli.",
+                    "D) Il sistema fotopico funziona meglio in condizioni di scarsa illuminazione."
+                ],
+                correctAnswer: 2
+            },
+            {
+                question: "12. Quale struttura del cervello riceve per prima i segnali visivi provenienti dalla retina?",
+                options: [
+                    "A) Collicolo superiore.",
+                    "B) Corteccia visiva primaria.",
+                    "C) Nucleo genicolato laterale del talamo.",
+                    "D) Corteccia parietale."
+                ],
+                correctAnswer: 2
+            },
+            {
+                question: "13. Qual è la funzione dell'inibizione laterale nella retina?",
+                options: [
+                    "A) Aumentare la sensibilità ai colori.",
+                    "B) Ridurre la sensibilità alla luce.",
+                    "C) Migliorare il contrasto e la percezione dei contorni.",
+                    "D) Aumentare l'acuità visiva in condizioni di bassa illuminazione."
+                ],
+                correctAnswer: 2
+            },
+            {
+                question: "14. Qual è il neurotrasmettitore principale rilasciato dai fotorecettori?",
+                options: [
+                    "A) Dopamina.",
+                    "B) Acetilcolina.",
+                    "C) Glutammato.",
+                    "D) Serotonina."
+                ],
+                correctAnswer: 2
+            },
+            {
+                question: "15. Qual è il meccanismo attraverso cui i fotorecettori rispondono alla luce?",
+                options: [
+                    "A) Depolarizzazione della membrana cellulare.",
+                    "B) Iperpolarizzazione della membrana cellulare.",
+                    "C) Aumento della concentrazione di GMP ciclico.",
+                    "D) Riduzione del rilascio di fotopigmento."
+                ],
+                correctAnswer: 1
+            },
+            {
+                question: "16. Quale tipo di coni è sensibile alla luce blu?",
+                options: [
+                    "A) Coni L.",
+                    "B) Coni S.",
+                    "C) Coni M.",
+                    "D) Coni P."
+                ],
+                correctAnswer: 1
+            },
+            {
+                question: "17. In quale area del cervello si incrociano gli assoni provenienti dalla retina?",
+                options: [
+                    "A) Corteccia visiva primaria.",
+                    "B) Nucleo genicolato laterale.",
+                    "C) Chiasma ottico.",
+                    "D) Collicolo inferiore."
+                ],
+                correctAnswer: 2
+            },
+            {
+                question: "18. Qual è il ruolo del collicolo superiore?",
+                options: [
+                    "A) Controllare i movimenti oculari rapidi e le dimensioni della pupilla.",
+                    "B) Analizzare le informazioni sul colore.",
+                    "C) Rilevare la profondità degli oggetti.",
+                    "D) Trasmettere segnali visivi al nucleo genicolato laterale."
+                ],
+                correctAnswer: 0
+            },
+            {
+                question: "19. Cosa accade alla pupilla in risposta a un'illuminazione intensa?",
+                options: [
+                    "A) Si dilata per permettere l'ingresso di più luce.",
+                    "B) Si contrae per ridurre la quantità di luce in ingresso.",
+                    "C) Rilascia glutammato per migliorare l'acuità visiva.",
+                    "D) Modifica la lunghezza d'onda della luce ricevuta."
+                ],
+                correctAnswer: 1
+            },
+            {
+                question: "20. Quale funzione svolge la radiazione ottica?",
+                options: [
+                    "A) Trasporta i segnali visivi dal chiasma ottico ai fotorecettori.",
+                    "B) Controlla i movimenti dei muscoli oculari.",
+                    "C) Trasmette l'informazione visiva dal nucleo genicolato laterale alla corteccia visiva primaria.",
+                    "D) Regola la dilatazione della pupilla in condizioni di luce intensa."
+                ],
+                correctAnswer: 2
+           {
+                question: "21. Quale effetto fisiologico è causato dall'assunzione di nicotina?",
+                options: [
+                    "A) Aumento della pressione sanguigna",
+                    "B) Diminuzione del battito cardiaco",
+                    "C) Diminuzione dell'acido cloridrico nello stomaco",
+                    "D) Riduzione dei movimenti peristaltici"
+                ],
+                correctAnswer: 0
+            },
+            {
+                question: "22. Come agisce la cocaina a livello sinaptico?",
+                options: [
+                    "A) Aumenta il rilascio di serotonina",
+                    "B) Stimola il rilascio di acetilcolina",
+                    "C) Blocca i trasportatori della dopamina",
+                    "D) Inibisce l'azione dei recettori GABAA"
+                ],
+                correctAnswer: 2
+            },
+            {
+                question: "23. Quale tra queste sostanze provoca il rilascio di catecolammine senza potenziali d'azione?",
+                options: [
+                    "A) Caffeina",
+                    "B) Cocaina",
+                    "C) Nicotina",
+                    "D) Amfetamine"
+                ],
+                correctAnswer: 3
+            },
+            {
+                question: "24. Cosa accade quando la caffeina altera l'attività degli autorecettori dell'adenosina?",
+                options: [
+                    "A) Riduce la quantità di neurotrasmettitore rilasciato",
+                    "B) Aumenta la quantità di neurotrasmettitore rilasciato",
+                    "C) Attiva i recettori nicotinici",
+                    "D) Aumenta la sensibilità agli stimoli inibitori"
+                ],
+                correctAnswer: 1
+            },
+            {
+                question: "25. Quale di questi recettori è maggiormente coinvolto negli effetti degli allucinogeni come l'LSD?",
+                options: [
+                    "A) Recettori dopaminergici D2",
+                    "B) Recettori nicotinici",
+                    "C) Recettori della serotonina 5HT2A",
+                    "D) Recettori GABAA"
+                ],
+                correctAnswer: 2
+            },
+            {
+                question: "26. Quali effetti a lungo termine può causare l'assunzione di nicotina durante l'adolescenza?",
+                options: [
+                    "A) Aumento della memoria",
+                    "B) Miglioramento della concentrazione",
+                    "C) Deterioramento delle sinapsi glutammatergiche nella corteccia prefrontale",
+                    "D) Aumento del rilascio di dopamina"
+                ],
+                correctAnswer: 2
+            },
+            {
+                question: "27. Quale sostanza provoca una sindrome da astinenza associata al blocco dei trasportatori della dopamina?",
+                options: [
+                    "A) Nicotina",
+                    "B) Caffeina",
+                    "C) Cocaina",
+                    "D) LSD"
+                ],
+                correctAnswer: 2
+            },
+            {
+                question: "28. Quale effetto collaterale è associato all'uso prolungato di amfetamine?",
+                options: [
+                    "A) Perdita di peso",
+                    "B) Aumento della pressione sanguigna",
+                    "C) Diminuzione dell'acido cloridrico nello stomaco",
+                    "D) Miglioramento della coordinazione motoria"
+                ],
+                correctAnswer: 0
+            },
+            {
+                question: "29. Quale recettore è bloccato dalla ketamina, provocando stati dissociativi?",
+                options: [
+                    "A) Recettori 5HT2A",
+                    "B) Recettori NMDA",
+                    "C) Recettori dopaminergici",
+                    "D) Recettori GABAA"
+                ],
+                correctAnswer: 1
+            },
+            {
+                question: "30. Che effetto ha l'alcol sui recettori GABAA?",
+                options: [
+                    "A) Li blocca, diminuendo l'inibizione sinaptica",
+                    "B) Li stimola, aprendo i canali del cloro",
+                    "C) Riduce il rilascio di dopamina",
+                    "D) Aumenta la sensibilità degli autorecettori della serotonina"
+                ],
+                correctAnswer: 1
+            {
+                question: "31. Quale componente dell'orecchio interno rileva la rotazione della testa lungo i tre assi spaziali?",
+                options: [
+                    "a) L'utricolo",
+                    "b) I canali semicircolari",
+                    "c) Il sacculo",
+                    "d) La coclea"
+                ],
+                correctAnswer: 1
+            },
+            {
+                question: "32. Qual è la funzione degli otoliti nell'apparato vestibolare?",
+                options: [
+                    "a) Rilevano il movimento della testa lungo gli assi",
+                    "b) Migliorano la sensibilità del sistema, massimizzando la deflessione delle ciglia",
+                    "c) Trasportano le informazioni al tronco encefalico",
+                    "d) Controllano i movimenti oculari"
+                ],
+                correctAnswer: 1
+            },
+            {
+                question: "33. Cosa succede alle ciglia delle cellule recettoriali ciliate nei canali semicircolari quando la testa ruota?",
+                options: [
+                    "a) Le ciglia si fermano",
+                    "b) Le ciglia si deflettono in risposta al movimento dell'endolinfa",
+                    "c) Le ciglia rilevano solo la velocità del movimento",
+                    "d) Non si verificano cambiamenti"
+                ],
+                correctAnswer: 1
+            },
+            {
+                question: "34. Qual è la funzione del riflesso vestibolo-oculare (VOR)?",
+                options: [
+                    "a) Permettere all'occhio di adattarsi alla luce",
+                    "b) Stabilizzare la visione mantenendo lo sguardo fisso su un punto durante i movimenti della testa",
+                    "c) Coordinare il movimento delle palpebre",
+                    "d) Rilevare i movimenti di accelerazione lineare"
+                ],
+                correctAnswer: 1
+            },
+            {
+                question: "35. Dove si trovano i nuclei vestibolari che ricevono le informazioni dai recettori del sistema vestibolare?",
+                options: [
+                    "a) Nel cervelletto",
+                    "b) Nel tronco dell'encefalo",
+                    "c) Nella corteccia visiva",
+                    "d) Nel talamo"
+                ],
+                correctAnswer: 1
+            },
+            {
+                question: "36. Qual è la funzione principale del padiglione auricolare?",
+                options: [
+                    "A) Convertire le onde sonore in segnali elettrici",
+                    "B) Amplificare le onde sonore",
+                    "C) Incanalare le onde sonore nel condotto uditivo",
+                    "D) Rilevare le alte frequenze"
+                ],
+                correctAnswer: 2
+            },
+            {
+                question: "37. Quale parte dell'orecchio separa l'orecchio medio dall'orecchio interno?",
+                options: [
+                    "A) Membrana basilare",
+                    "B) Membrana timpanica",
+                    "C) Finestra ovale",
+                    "D) Coclea"
+                ],
+                correctAnswer: 2
+            },
+            {
+                question: "38. Cosa causa il movimento della membrana basilare?",
+                options: [
+                    "A) La flessione delle ciglia delle cellule ciliate",
+                    "B) Le onde sonore che raggiungono il condotto uditivo",
+                    "C) Le onde generate nel fluido della scala vestibolare",
+                    "D) L'attività dei tip-link"
+                ],
+                correctAnswer: 2
+            },
+            {
+                question: "39. Quale funzione svolgono i tip-link nelle cellule ciliate uditive?",
+                options: [
+                    "A) Regolano il flusso di ossigeno nelle cellule ciliate",
+                    "B) Trasportano segnali elettrici al cervello",
+                    "C) Modificano la rigidità della membrana basilare",
+                    "D) Aprono canali ionici per consentire l'ingresso di ioni"
+                ],
+                correctAnswer: 3
+            },
+            {
+                question: "40. Qual è il primo punto in cui vengono elaborate le informazioni provenienti da entrambe le orecchie?",
+                options: [
+                    "A) Nuclei olivari superiori",
+                    "B) Nucleo cocleare dorsale",
+                    "C) Nucleo genicolato mediale",
+                    "D) Talamo"
+                ],
+                correctAnswer: 0
             }
         ];
 
+
+let quizData = [];
         let currentQuestion = 0;
         let userAnswers = [];
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+
+        function selectRandomQuestions() {
+            shuffleArray(allQuizData);
+            quizData = allQuizData.slice(0, 20);
+        }
 
         function showQuestion(index) {
             const q = quizData[index];
@@ -243,6 +560,12 @@
             document.getElementById("prevBtn").disabled = index === 0;
             document.getElementById("nextBtn").textContent = index === quizData.length - 1 ? "Fine" : "Successiva";
             document.getElementById("submitBtn").style.display = index === quizData.length - 1 ? "inline-block" : "none";
+            updateProgress();
+        }
+
+        function updateProgress() {
+            const progressDiv = document.getElementById("progress");
+            progressDiv.textContent = `Domanda ${currentQuestion + 1} di ${quizData.length}`;
         }
 
         function selectOption(optionIndex) {
@@ -310,9 +633,11 @@
             document.getElementById("prevBtn").style.display = "none";
             document.getElementById("nextBtn").style.display = "none";
             document.getElementById("submitBtn").style.display = "none";
+            document.getElementById("progress").style.display = "none";
         }
 
         function restartQuiz() {
+            selectRandomQuestions();
             currentQuestion = 0;
             userAnswers = [];
             document.getElementById("quiz").style.display = "block";
@@ -320,9 +645,11 @@
             document.getElementById("nextBtn").style.display = "inline-block";
             document.getElementById("results").innerHTML = "";
             document.getElementById("recap").innerHTML = "";
+            document.getElementById("progress").style.display = "block";
             showQuestion(currentQuestion);
         }
 
+        selectRandomQuestions();
         showQuestion(currentQuestion);
     </script>
 </body>
