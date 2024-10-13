@@ -1,138 +1,104 @@
-<!DOCTYPE html>
-<html lang="it">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CHI VUOL ESSERE PSICOBIOLOGA?</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            max-width: 600px;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: #1a1a1a;
-            color: #ffffff;
-        }
-        h1 {
-            text-align: center;
-            color: #ffd700;
-            font-size: 24px;
-            margin-bottom: 30px;
-        }
-        .question {
-            text-align: center;
-            font-size: 1.2em;
-            margin-bottom: 20px;
-            color: #00ffff;
-        }
-        .options {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-        }
-        .option {
-            background-color: #333333;
-            border: 1px solid #555555;
-            padding: 10px;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-        .option:hover {
-            background-color: #444444;
-        }
-        .option.selected {
-            background-color: #ffd700;
-            color: #000000;
-            font-weight: bold;
-        }
-        .option.correct {
-            background-color: #00ff00;
-            color: #000000;
-        }
-        .option.incorrect {
-            background-color: #ff0000;
-            color: #ffffff;
-        }
-        .controls {
-            margin-top: 20px;
-            text-align: center;
-        }
-        button {
-            padding: 10px 20px;
-            font-size: 16px;
-            margin: 0 10px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            cursor: pointer;
-            border-radius: 5px;
-        }
-        button:hover {
-            background-color: #45a049;
-        }
-        button:disabled {
-            background-color: #cccccc;
-            cursor: not-allowed;
-        }
-        #results, #recap {
-            margin-top: 20px;
-            text-align: left;
-        }
-        .recap-item {
-            margin-bottom: 20px;
-            padding: 10px;
-            border: 1px solid #555555;
-            border-radius: 5px;
-        }
-        .recap-item.correct {
-            background-color: #004400;
-        }
-        .recap-item.incorrect {
-            background-color: #440000;
-        }
-        #restartBtn {
-            display: block;
-            margin: 20px auto;
-            background-color: #ffd700;
-            color: #000000;
-        }
-        #restartBtn:hover {
-            background-color: #ffea00;
-        }
-    </style>
-</head>
-<body>
-    <h1>CHI VUOL ESSERE PSICOBIOLOGA?</h1>
-    <div id="quiz">
-        <div class="question" id="question"></div>
-        <div class="options" id="options"></div>
-    </div>
-    <div class="controls">
-        <button onclick="previousQuestion()" id="prevBtn">Precedente</button>
-        <button onclick="nextQuestion()" id="nextBtn">Successiva</button>
-        <button onclick="checkAnswers()" id="submitBtn" style="display: none;">Verifica le risposte</button>
-    </div>
-    <div id="results"></div>
-    <div id="recap"></div>
-    <button onclick="restartQuiz()" id="restartBtn">Ricomincia</button>
-
-   <script>
+ <script>
         const quizData = [
             {
-                question: "Qual è la capitale dell'Italia?",
-                options: ["Milano", "Roma", "Firenze", "Napoli"],
+                question: "1. Qual è la funzione principale dei bastoncelli nella retina?",
+                options: [
+                    "a) Permettono la visione a colori.",
+                    "b) Sono specializzati nella visione in condizioni di bassa illuminazione.",
+                    "c) Sono responsabili della percezione dei dettagli fini.",
+                    "d) Si trovano principalmente nella fovea."
+                ],
                 correctAnswer: 1
             },
             {
-                question: "Chi ha dipinto la Gioconda?",
-                options: ["Michelangelo", "Leonardo da Vinci", "Raffaello", "Botticelli"],
-                correctAnswer: 1
-            },
-            {
-                question: "Qual è il pianeta più grande del sistema solare?",
-                options: ["Marte", "Venere", "Giove", "Saturno"],
+                question: "2. Qual è il fotopigmento presente nei bastoncelli?",
+                options: [
+                    "a) Opsina.",
+                    "b) Retinale.",
+                    "c) Rodopsina.",
+                    "d) Melanopsina."
+                ],
                 correctAnswer: 2
+            },
+            {
+                question: "3. Quale tipo di cellula retinica trasmette segnali dai fotorecettori alle cellule gangliari?",
+                options: [
+                    "a) Cellule amacrine.",
+                    "b) Cellule orizzontali.",
+                    "c) Cellule bipolari.",
+                    "d) Cellule gliali."
+                ],
+                correctAnswer: 2
+            },
+            {
+                question: "4. Qual è il ruolo delle cellule gangliari nella retina?",
+                options: [
+                    "a) Trasmettono i segnali luminosi al nucleo genicolato laterale.",
+                    "b) Filtrano la luce per migliorare la visione dei colori.",
+                    "c) Mantengono aperti i canali del sodio in condizioni di buio.",
+                    "d) Inibiscono il rilascio di glutammato in risposta alla luce."
+                ],
+                correctAnswer: 0
+            },
+            {
+                question: "5. Dove termina la maggior parte degli assoni del tratto ottico?",
+                options: [
+                    "a) Corteccia visiva primaria.",
+                    "b) Collicolo superiore.",
+                    "c) Nucleo genicolato laterale del talamo.",
+                    "d) Chiasma ottico."
+                ],
+                correctAnswer: 2
+            },
+            {
+                question: "6. Quale delle seguenti affermazioni descrive correttamente l'adattamento alla luce dei fotorecettori?",
+                options: [
+                    "a) L'adattamento alla luce si verifica grazie all'attivazione costante dei canali del sodio.",
+                    "b) L'adattamento dipende dalla continua sintesi di fotopigmenti come la melanopsina.",
+                    "c) I fotorecettori diminuiscono la loro sensibilità alla luce in ambienti molto luminosi.",
+                    "d) Il sistema scotopico è responsabile dell'adattamento alla luce intensa."
+                ],
+                correctAnswer: 2
+            },
+            {
+                question: "7. Quale processo avviene quando la luce stimola i fotorecettori?",
+                options: [
+                    "a) Si aprono i canali del sodio, provocando depolarizzazione.",
+                    "b) La concentrazione di cGMP aumenta, aprendo i canali del sodio.",
+                    "c) La rodopsina si attiva, portando all'iperpolarizzazione del fotorecettore.",
+                    "d) Il rilascio di glutammato aumenta."
+                ],
+                correctAnswer: 2
+            },
+            {
+                question: "8. Qual è il ruolo delle cellule gangliari a opponenza cromatica?",
+                options: [
+                    "a) Ricevono segnali da fotorecettori adiacenti per migliorare l'acuità visiva.",
+                    "b) Sono sensibili ai cambiamenti di intensità luminosa.",
+                    "c) Codificano le informazioni cromatiche opponendo segnali da coni con sensibilità diversa.",
+                    "d) Coordinano i movimenti oculari rapidi verso un bersaglio."
+                ],
+                correctAnswer: 2
+            },
+            {
+                question: "9. Cosa accade al livello del chiasma ottico?",
+                options: [
+                    "a) Gli assoni dei fotorecettori si connettono direttamente al cervello.",
+                    "b) Le informazioni visive passano dai coni ai bastoncelli.",
+                    "c) Gli assoni della metà nasale della retina si incrociano.",
+                    "d) Si completa l'elaborazione dei colori e delle forme."
+                ],
+                correctAnswer: 2
+            },
+            {
+                question: "10. Quale area corticale è specializzata nel riconoscimento delle forme e dei colori?",
+                options: [
+                    "a) Corteccia motoria.",
+                    "b) Corteccia visiva primaria (V1).",
+                    "c) Collicolo superiore.",
+                    "d) Corteccia visiva infero-temporale."
+                ],
+                correctAnswer: 3
             }
         ];
 
@@ -141,7 +107,7 @@
 
         function showQuestion(index) {
             const q = quizData[index];
-            document.getElementById("question").textContent = `${index + 1}. ${q.question}`;
+            document.getElementById("question").textContent = q.question;
             
             const optionsContainer = document.getElementById("options");
             optionsContainer.innerHTML = "";
@@ -209,7 +175,7 @@
 
                 recapHtml += `
                     <div class="recap-item ${isCorrect ? 'correct' : 'incorrect'}">
-                        <p><strong>Domanda ${index + 1}:</strong> ${q.question}</p>
+                        <p><strong>${q.question}</strong></p>
                         <p>La tua risposta: ${q.options[userAnswers[index]]}</p>
                         <p>Risposta corretta: ${q.options[q.correctAnswer]}</p>
                     </div>
@@ -222,7 +188,6 @@
             const recapDiv = document.getElementById("recap");
             recapDiv.innerHTML = recapHtml;
 
-            // Nascondi il quiz e mostra solo i risultati e il recap
             document.getElementById("quiz").style.display = "none";
             document.getElementById("prevBtn").style.display = "none";
             document.getElementById("nextBtn").style.display = "none";
@@ -242,5 +207,3 @@
 
         showQuestion(currentQuestion);
     </script>
-</body>
-</html>
