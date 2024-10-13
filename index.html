@@ -123,7 +123,7 @@
     <div id="recap"></div>
     <button onclick="restartQuiz()" id="restartBtn">Ricomincia</button>
    <script>
-        const quizData = [
+        const allQuizData = [
             {
                 question: "1. Qual è la funzione principale dei bastoncelli nella retina?",
                 options: [
@@ -525,132 +525,132 @@
 
 
 let quizData = [];
-        let currentQuestion = 0;
-        let userAnswers = [];
+let currentQuestion = 0;
+let userAnswers = [];
 
-        function shuffleArray(array) {
-            for (let i = array.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [array[i], array[j]] = [array[j], array[i]];
-            }
+function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+}
+
+function selectRandomQuestions() {
+    shuffleArray(allQuizData);
+    quizData = allQuizData.slice(0, 20);
+}
+
+function showQuestion(index) {
+    const q = quizData[index];
+    document.getElementById("question").textContent = q.question;
+    
+    const optionsContainer = document.getElementById("options");
+    optionsContainer.innerHTML = "";
+    q.options.forEach((option, i) => {
+        const optionDiv = document.createElement("div");
+        optionDiv.className = "option";
+        optionDiv.textContent = option;
+        optionDiv.onclick = () => selectOption(i);
+        if (userAnswers[index] === i) {
+            optionDiv.classList.add("selected");
         }
+        optionsContainer.appendChild(optionDiv);
+    });
 
-        function selectRandomQuestions() {
-            shuffleArray(allQuizData);
-            quizData = allQuizData.slice(0, 20);
+    document.getElementById("prevBtn").disabled = index === 0;
+    document.getElementById("nextBtn").textContent = index === quizData.length - 1 ? "Fine" : "Successiva";
+    document.getElementById("submitBtn").style.display = index === quizData.length - 1 ? "inline-block" : "none";
+    updateProgress();
+}
+
+function updateProgress() {
+    const progressDiv = document.getElementById("progress");
+    progressDiv.textContent = `Domanda ${currentQuestion + 1} di ${quizData.length}`;
+}
+
+function selectOption(optionIndex) {
+    userAnswers[currentQuestion] = optionIndex;
+    const options = document.querySelectorAll(".option");
+    options.forEach((option, i) => {
+        option.classList.toggle("selected", i === optionIndex);
+    });
+}
+
+function showCorrectAnswer() {
+    const q = quizData[currentQuestion];
+    const options = document.querySelectorAll(".option");
+    options.forEach((option, i) => {
+        if (i === q.correctAnswer) {
+            option.classList.add("correct");
+        } else if (i === userAnswers[currentQuestion]) {
+            option.classList.add("incorrect");
         }
+    });
+}
 
-        function showQuestion(index) {
-            const q = quizData[index];
-            document.getElementById("question").textContent = q.question;
-            
-            const optionsContainer = document.getElementById("options");
-            optionsContainer.innerHTML = "";
-            q.options.forEach((option, i) => {
-                const optionDiv = document.createElement("div");
-                optionDiv.className = "option";
-                optionDiv.textContent = option;
-                optionDiv.onclick = () => selectOption(i);
-                if (userAnswers[index] === i) {
-                    optionDiv.classList.add("selected");
-                }
-                optionsContainer.appendChild(optionDiv);
-            });
-
-            document.getElementById("prevBtn").disabled = index === 0;
-            document.getElementById("nextBtn").textContent = index === quizData.length - 1 ? "Fine" : "Successiva";
-            document.getElementById("submitBtn").style.display = index === quizData.length - 1 ? "inline-block" : "none";
-            updateProgress();
-        }
-
-        function updateProgress() {
-            const progressDiv = document.getElementById("progress");
-            progressDiv.textContent = `Domanda ${currentQuestion + 1} di ${quizData.length}`;
-        }
-
-        function selectOption(optionIndex) {
-            userAnswers[currentQuestion] = optionIndex;
-            const options = document.querySelectorAll(".option");
-            options.forEach((option, i) => {
-                option.classList.toggle("selected", i === optionIndex);
-            });
-        }
-
-        function showCorrectAnswer() {
-            const q = quizData[currentQuestion];
-            const options = document.querySelectorAll(".option");
-            options.forEach((option, i) => {
-                if (i === q.correctAnswer) {
-                    option.classList.add("correct");
-                } else if (i === userAnswers[currentQuestion]) {
-                    option.classList.add("incorrect");
-                }
-            });
-        }
-
-        function nextQuestion() {
-            showCorrectAnswer();
-            setTimeout(() => {
-                if (currentQuestion < quizData.length - 1) {
-                    currentQuestion++;
-                    showQuestion(currentQuestion);
-                }
-            }, 1000);
-        }
-
-        function previousQuestion() {
-            if (currentQuestion > 0) {
-                currentQuestion--;
-                showQuestion(currentQuestion);
-            }
-        }
-
-        function checkAnswers() {
-            showCorrectAnswer();
-            let score = 0;
-            let recapHtml = "<h2>Riepilogo delle risposte:</h2>";
-
-            quizData.forEach((q, index) => {
-                const isCorrect = userAnswers[index] === q.correctAnswer;
-                if (isCorrect) score++;
-
-                recapHtml += `
-                    <div class="recap-item ${isCorrect ? 'correct' : 'incorrect'}">
-                        <p><strong>${q.question}</strong></p>
-                        <p>La tua risposta: ${q.options[userAnswers[index]]}</p>
-                        <p>Risposta corretta: ${q.options[q.correctAnswer]}</p>
-                    </div>
-                `;
-            });
-
-            const resultsDiv = document.getElementById("results");
-            resultsDiv.innerHTML = `<h2>Hai ottenuto ${score} su ${quizData.length} risposte corrette.</h2>`;
-
-            const recapDiv = document.getElementById("recap");
-            recapDiv.innerHTML = recapHtml;
-
-            document.getElementById("quiz").style.display = "none";
-            document.getElementById("prevBtn").style.display = "none";
-            document.getElementById("nextBtn").style.display = "none";
-            document.getElementById("submitBtn").style.display = "none";
-            document.getElementById("progress").style.display = "none";
-        }
-
-        function restartQuiz() {
-            selectRandomQuestions();
-            currentQuestion = 0;
-            userAnswers = [];
-            document.getElementById("quiz").style.display = "block";
-            document.getElementById("prevBtn").style.display = "inline-block";
-            document.getElementById("nextBtn").style.display = "inline-block";
-            document.getElementById("results").innerHTML = "";
-            document.getElementById("recap").innerHTML = "";
-            document.getElementById("progress").style.display = "block";
+function nextQuestion() {
+    showCorrectAnswer();
+    setTimeout(() => {
+        if (currentQuestion < quizData.length - 1) {
+            currentQuestion++;
             showQuestion(currentQuestion);
         }
+    }, 1000);
+}
 
-        selectRandomQuestions();
+function previousQuestion() {
+    if (currentQuestion > 0) {
+        currentQuestion--;
         showQuestion(currentQuestion);
+    }
+}
+
+function checkAnswers() {
+    showCorrectAnswer();
+    let score = 0;
+    let recapHtml = "<h2>Riepilogo delle risposte:</h2>";
+
+    quizData.forEach((q, index) => {
+        const isCorrect = userAnswers[index] === q.correctAnswer;
+        if (isCorrect) score++;
+
+        recapHtml += `
+            <div class="recap-item ${isCorrect ? 'correct' : 'incorrect'}">
+                <p><strong>${q.question}</strong></p>
+                <p>La tua risposta: ${q.options[userAnswers[index]]}</p>
+                <p>Risposta corretta: ${q.options[q.correctAnswer]}</p>
+            </div>
+        `;
+    });
+
+    const resultsDiv = document.getElementById("results");
+    resultsDiv.innerHTML = `<h2>Hai ottenuto ${score} su ${quizData.length} risposte corrette.</h2>`;
+
+    const recapDiv = document.getElementById("recap");
+    recapDiv.innerHTML = recapHtml;
+
+    document.getElementById("quiz").style.display = "none";
+    document.getElementById("prevBtn").style.display = "none";
+    document.getElementById("nextBtn").style.display = "none";
+    document.getElementById("submitBtn").style.display = "none";
+    document.getElementById("progress").style.display = "none";
+}
+
+function restartQuiz() {
+    selectRandomQuestions();
+    currentQuestion = 0;
+    userAnswers = [];
+    document.getElementById("quiz").style.display = "block";
+    document.getElementById("prevBtn").style.display = "inline-block";
+    document.getElementById("nextBtn").style.display = "inline-block";
+    document.getElementById("results").innerHTML = "";
+    document.getElementById("recap").innerHTML = "";
+    document.getElementById("progress").style.display = "block";
+    showQuestion(currentQuestion);
+}
+
+selectRandomQuestions();
+showQuestion(currentQuestion);
     </script>
 </body>
 </html>
