@@ -105,6 +105,16 @@
             margin-bottom: 20px;
             color: #ffd700;
         }
+
+#secondGameBtn {
+    display: block;
+    margin: 20px auto;
+    background-color: #00bfff;
+    color: #000000;
+}
+#secondGameBtn:hover {
+    background-color: #33ccff;
+}
     </style>
 </head>
 <body>
@@ -122,6 +132,9 @@
     <div id="results"></div>
     <div id="recap"></div>
     <button onclick="restartQuiz()" id="restartBtn">Ricomincia</button>
+<button onclick="location.href='second.html'" id="secondGameBtn">Gioco di Associazione</button>
+
+
    <script>
         const allQuizData = [
             {
@@ -1005,6 +1018,10 @@ function restartQuiz() {
     document.getElementById("recap").innerHTML = "";
     document.getElementById("progress").style.display = "block";
     showQuestion(currentQuestion);
+}
+
+function goToSecondGame() {
+    window.location.href = 'second.html';
 }
 
 // Inizializzazione del quiz
