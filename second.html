@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gioco di Collegamento Frasi e Definizioni</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #1a1a1a;
+            color: #ffffff;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: #2a2a2a;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.3);
+        }
+        h1 {
+            text-align: center;
+            color: #ffd700;
+            font-size: 28px;
+            margin-bottom: 30px;
+        }
+        .game-area {
+            display: flex;
+            justify-content: space-between;
+            position: relative;
+        }
+        .phrases, .definitions {
+            padding: 10px;
+            box-sizing: border-box;
+        }
+        .phrases {
+            width: 60%;
+        }
+        .definitions {
+            width: 38%;
+        }
+        .phrase, .definition {
+            margin-bottom: 10px;
+            padding: 10px;
+            background-color: #333333;
+            border: 1px solid #555555;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .phrase {
+            font-size: 0.9em;
+        }
+        .definition {
+            font-size: 0.85em;
+        }
+        .phrase:hover, .definition:hover {
+            background-color: #444444;
+        }
+        .phrase.selected, .definition.selected {
+            background-color: #555555;
+        }
+        #result {
+            text-align: center;
+            margin-top: 20px;
+            font-weight: bold;
+            color: #00ffff;
+        }
+        button {
+            display: inline-block;
+            margin: 10px;
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        #lines {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+        .button-container {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>CHI VUOL ESSERE PSICOBIOLOGA?</h1>
+        <div class="game-area">
+            <div class="phrases" id="phrases"></div>
+            <div class="definitions" id="definitions"></div>
+            <svg id="lines"></svg>
+        </div>
+        <div id="result"></div>
+        <div class="button-container">
+            <button id="checkButton">Verifica risposte</button>
+            <button id="resetButton">Ricomincia</button>
+        </div>
+    </div>
+
+    <script>
+        const phrases = [
+            "L'attività di certi recettori richiede spesso l'influenza di molecole che non possono attraversare liberamente le membrane.",
+            "L'equilibrio tra i compartimenti può essere turbato non da sostanze, ma da processi naturali come il respiro o il calore.",
+            "Quando la pressione cambia, anche se la concentrazione rimane stabile, certe cellule possono \"avvisare\" il sistema nervoso.",
+            "Alcuni ormoni inducono il rilascio di altre sostanze per prevenire lo spreco di risorse che si trovano in quantità ridotte.",
+            "L'attività di queste cellule può essere influenzata da un cambiamento nelle dimensioni dovuto alla differenza di concentrazione.",
+            "Le risposte a determinati stimoli sono attivate solo quando il cambiamento è troppo marcato per essere gestito da un singolo sistema.",
+            "In certe condizioni, l'organismo non si limita a segnalare la mancanza di risorse, ma attiva anche meccanismi che rallentano i processi digestivi.",
+            "La segnalazione relativa all'appetito può avvenire anche in presenza di livelli energetici adeguati, quando le riserve future sembrano insufficienti.",
+            "L'inversione della concentrazione può portare a un cambiamento repentino nel comportamento cellulare che, però, si stabilizza solo dopo una fase temporanea.",
+            "Certi segnali endocrini riescono ad alterare i processi metabolici stimolando la produzione di sostanze necessarie solo in momenti di particolare bisogno."
+        ];
+
+        const definitions = [
+            "Canali ionici regolati meccanicamente da variazioni osmotiche",
+            "Barocettori rilevatori della variazione di pressione sanguigna",
+            "Aldosterone come mediatore della conservazione del sodio",
+            "Pompa sodio-potassio e il mantenimento del potenziale di riposo",
+            "Feedback negativo per la correzione delle deviazioni omeostatiche",
+            "Sete ipovolemica attivata dalla riduzione del volume di liquidi",
+            "Grelina e la segnalazione dell'appetito durante il digiuno",
+            "Effetti dell'iperpolarizzazione durante la chiusura lenta dei canali del potassio",
+            "Secrezione dell'insulina come risposta alla fase cefalica dell'assunzione di cibo",
+            "Leptina e il controllo delle riserve energetiche a lungo termine"
+        ];
+
+        const correctPairs = {
+            0: 3, 1: 5, 2: 1, 3: 2, 4: 0, 5: 4, 6: 6, 7: 9, 8: 7, 9: 8
+        };
+
+        let selectedPhrase = null;
+        let selectedDefinition = null;
+        let connections = [];
+        const colors = ['#FF6633', '#FFB399', '#FF33FF', '#FFFF99', '#00B3E6', '#E6B333', '#3366E6', '#999966', '#99FF99', '#B34D4D'];
+
+        function createGameElements() {
+            const phrasesContainer = document.getElementById('phrases');
+            const definitionsContainer = document.getElementById('definitions');
+
+            phrases.forEach((phrase, index) => {
+                const phraseElement = document.createElement('div');
+                phraseElement.className = 'phrase';
+                phraseElement.textContent = `${index + 1}. ${phrase}`;
+                phraseElement.dataset.index = index;
+                phraseElement.addEventListener('click', () => toggleSelection(phraseElement, 'phrase'));
+                phrasesContainer.appendChild(phraseElement);
+            });
+
+            definitions.forEach((definition, index) => {
+                const definitionElement = document.createElement('div');
+                definitionElement.className = 'definition';
+                definitionElement.textContent = `${String.fromCharCode(97 + index)}) ${definition}`;
+                definitionElement.dataset.index = index;
+                definitionElement.addEventListener('click', () => toggleSelection(definitionElement, 'definition'));
+                definitionsContainer.appendChild(definitionElement);
+            });
+        }
+
+        function toggleSelection(element, type) {
+            const index = parseInt(element.dataset.index);
+            
+            if (type === 'phrase') {
+                if (selectedPhrase === element) {
+                    // Deselect the phrase
+                    selectedPhrase = null;
+                    element.classList.remove('selected');
+                    element.style.backgroundColor = '#333333';
+                    removeConnection(index, 'phrase');
+                } else {
+                    // Select the phrase
+                    if (selectedPhrase) {
+                        selectedPhrase.classList.remove('selected');
+                        selectedPhrase.style.backgroundColor = '#333333';
+                    }
+                    selectedPhrase = element;
+                    element.classList.add('selected');
+                }
+            } else {
+                if (selectedDefinition === element) {
+                    // Deselect the definition
+                    selectedDefinition = null;
+                    element.classList.remove('selected');
+                    element.style.backgroundColor = '#333333';
+                    removeConnection(index, 'definition');
+                } else {
+                    // Select the definition
+                    if (selectedDefinition) {
+                        selectedDefinition.classList.remove('selected');
+                        selectedDefinition.style.backgroundColor = '#333333';
+                    }
+                    selectedDefinition = element;
+                    element.classList.add('selected');
+                }
+            }
+
+            checkPair();
+        }
+
+        function removeConnection(index, type) {
+            if (type === 'phrase') {
+                connections = connections.filter(conn => conn.phrase !== index);
+            } else {
+                connections = connections.filter(conn => conn.definition !== index);
+            }
+            drawConnections();
+        }
+
+        function checkPair() {
+            if (selectedPhrase && selectedDefinition) {
+                const phraseIndex = parseInt(selectedPhrase.dataset.index);
+                const definitionIndex = parseInt(selectedDefinition.dataset.index);
+                
+                // Remove existing connections for this phrase and definition
+                connections = connections.filter(conn => conn.phrase !== phraseIndex && conn.definition !== definitionIndex);
+                
+                // Add new connection
+                connections.push({
+                    phrase: phraseIndex,
+                    definition: definitionIndex
+                });
+                
+                // Color the boxes
+                const colorIndex = connections.length - 1;
+                selectedPhrase.style.backgroundColor = colors[colorIndex];
+                selectedDefinition.style.backgroundColor = colors[colorIndex];
+                
+                drawConnections();
+                
+                selectedPhrase.classList.remove('selected');
+                selectedDefinition.classList.remove('selected');
+                selectedPhrase = null;
+                selectedDefinition = null;
+            }
+        }
+
+        function drawConnections() {
+            const svg = document.getElementById('lines');
+            svg.innerHTML = '';
+            connections.forEach((conn, index) => {
+                const phraseElement = document.querySelector(`.phrase[data-index="${conn.phrase}"]`);
+                const definitionElement = document.querySelector(`.definition[data-index="${conn.definition}"]`);
+                const phraseRect = phraseElement.getBoundingClientRect();
+                const definitionRect = definitionElement.getBoundingClientRect();
+                const containerRect = document.querySelector('.game-area').getBoundingClientRect();
+
+                const x1 = phraseRect.right - containerRect.left;
+                const y1 = phraseRect.top - containerRect.top + phraseRect.height / 2;
+                const x2 = definitionRect.left - containerRect.left;
+                const y2 = definitionRect.top - containerRect.top + definitionRect.height / 2;
+
+                const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                line.setAttribute('x1', x1);
+                line.setAttribute('y1', y1);
+                line.setAttribute('x2', x2);
+                line.setAttribute('y2', y2);
+                line.setAttribute('stroke', colors[index % colors.length]);
+                line.setAttribute('stroke-width', 2);
+                svg.appendChild(line);
+
+                // Update box colors
+                phraseElement.style.backgroundColor = colors[index % colors.length];
+                definitionElement.style.backgroundColor = colors[index % colors.length];
+            });
+        }
+
+        function checkAllAnswers() {
+            let correctCount = 0;
+            connections.forEach(conn => {
+                if (correctPairs[conn.phrase] === conn.definition) {
+                    correctCount++;
+                }
+            });
+
+            const resultElement = document.getElementById('result');
+            resultElement.textContent = `Hai indovinato ${correctCount} su 10 coppie correttamente!`;
+        }
+
+        function resetGame() {
+            connections = [];
+            drawConnections();
+            document.getElementById('result').textContent = '';
+            document.querySelectorAll('.phrase, .definition').forEach(el => {
+                el.classList.remove('selected');
+                el.style.backgroundColor = '#333333';
+            });
+            selectedPhrase = null;
+            selectedDefinition = null;
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            createGameElements();
+            document.getElementById('checkButton').addEventListener('click', checkAllAnswers);
+            document.getElementById('resetButton').addEventListener('click', resetGame);
+            window.addEventListener('resize', drawConnections);
+        });
+    </script>
+</body>
+</html>
