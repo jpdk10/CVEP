@@ -2155,8 +2155,10 @@ function shuffleArray(array) {
 }
 
 function selectRandomQuestions() {
-    shuffleArray(allQuizData);
-    quizData = allQuizData.slice(0, 20);
+    // Invece di selezionare solo 20 domande, ora prendiamo tutte le domande
+    quizData = [...allQuizData];
+    // Mescoliamo l'intero array di domande
+    shuffleArray(quizData);
 }
 
 function showQuestion(index) {
